@@ -1,12 +1,21 @@
 package one.Literalura.model;
+import jakarta.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import java.util.List;
 import java.util.stream.Collectors;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Entity
+@Table(name = "livros")
 public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String title;
+    @ManyToMany
+    private String authors;
+    private String languages;
+    private Integer downloadCount;
+
+
     public Integer getDownload_count() {
         return downloadCount;
     }
@@ -39,24 +48,17 @@ public class Book {
         this.languages = languages;
     }
 
-    private String title;
-    private String authors;
-    private String languages;
-    private Integer downloadCount;
+
 
 
     public Book(){    }
 
     public Book (DataResponseApi responseApi){
-
             this.title = responseApi.results().getFirst().titulo();
             this.authors = responseApi.results().getFirst().autores().stream().map(
                     a -> a.nomne() + " (" + a.anoNascimento() + "-" + a.anoFalecimento() + ")").collect(Collectors.joining(", "));
             this.languages = String.join(", ", responseApi.results().getFirst().idiomas());
             this.downloadCount = responseApi.results().getFirst().downloads();
-
-
-
     }
 
     @Override

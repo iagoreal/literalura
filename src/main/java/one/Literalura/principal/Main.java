@@ -1,7 +1,9 @@
 package one.Literalura.principal;
 
 import one.Literalura.model.Book;
+import one.Literalura.model.DataBook;
 import one.Literalura.model.DataResponseApi;
+import one.Literalura.repository.RepositoryBook;
 import one.Literalura.service.ConsumoApi;
 import one.Literalura.service.ConverteDados;
 import org.slf4j.Logger;
@@ -14,30 +16,28 @@ public class Main {
     private ConsumoApi consumo = new ConsumoApi();
     String endereco = "https://gutendex.com/books/?search=";
     private final ConverteDados converteDados = new ConverteDados();
-
     private final Scanner scanner = new Scanner(System.in);
     int chose;
-
-
     boolean condition = true;
+    private RepositoryBook repository;
+
+    public Main(RepositoryBook repositoryBook) {
+        this.repository = repositoryBook;
+    }
+
     public void showMenu() {
 
 
         while(condition){
             var menu = """
                     1 - Buscar livro
-                    2 -
-                    3 - 
-                    4 - 
-                    5 - 
-                    6 - 
-                    7 - 
-                    8 - 
-                    9 - 
-                    10 - 
-                    11 -  
-                                    
-                    0 - Sair                                 
+                    2 - Listar livros registrados
+                    3 - Listar autores registrados
+                    4 - Listar autores vivos em um determinado ano
+                    5 - Listar livros em um determinado idiomna
+                   
+
+                    0 - Sair
                     """;
 
             System.out.println(menu);
@@ -57,7 +57,7 @@ public class Main {
                     case 2:
 
                         break;
-                    case 3:
+                    case 0:
                         System.out.println("Fechando programa...");
                         condition = false;
                         break;
@@ -98,6 +98,7 @@ public class Main {
 
                     switch (option){
                         case 1:
+                            saveBookSearch();
                             System.out.println("livro armazenado, voltando ao menu princial");
                             break;
                         case 2:
@@ -119,6 +120,12 @@ public class Main {
         } else {
             System.out.println("Livro / Autor não encontrado no banco de dados.");
         }
+    }
+
+    private void saveBookSearch() {
+        DataResponseApi dados = getBookByTilteOrAuthor();
+        Book book = new Book(dados);
+        repository.save(book);
 
 
     }
