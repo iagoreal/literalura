@@ -2,6 +2,9 @@ package one.Literalura.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Book {
     public Integer getDownload_count() {
@@ -44,15 +47,14 @@ public class Book {
 
     public Book(){    }
 
-    public DataResponseApi Book (DataResponseApi responseApi){
-        this.title = responseApi.results().getFirst().titulo();
-        this.authors = responseApi.results().getFirst().autores().toString();
-        this.languages = responseApi.results().getFirst().idiomas().toString();
-        this.downloadCount = responseApi.results().getFirst().downloads();
+    public Book (DataResponseApi responseApi){
 
+            this.title = responseApi.results().getFirst().titulo();
+            this.authors = responseApi.results().getFirst().autores().stream().map(
+                    a -> a.nomne() + " (" + a.anoNascimento() + "-" + a.anoFalecimento() + ")").collect(Collectors.joining(", "));
+            this.languages = String.join(", ", responseApi.results().getFirst().idiomas());
+            this.downloadCount = responseApi.results().getFirst().downloads();
 
-
-        return
 
 
     }
