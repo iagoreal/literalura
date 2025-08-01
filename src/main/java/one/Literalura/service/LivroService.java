@@ -16,7 +16,7 @@ public class LivroService {
 
     public Book saveBook (String titulo, String authors, String languages, Integer downloadCount){
         Autor autor = new Autor();
-        autor.setNomne(authors);
+        autor.setNome(authors);
 
         Autor saveAutor = repositoryAuthor.save(autor);
 

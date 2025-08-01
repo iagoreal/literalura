@@ -2,21 +2,12 @@ package one.Literalura.model;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "autores")
 public class Autor {
 
-    private String nomne;
+    private String nome;
 
-    public List<Book> getLivros() {
-        return livros;
-    }
-
-    public void setLivros(List<Book> livros) {
-        this.livros = livros;
-    }
 
     public Integer getAnoNascimento() {
         return anoNascimento;
@@ -34,12 +25,12 @@ public class Autor {
         this.anoFalecimento = anoFalecimento;
     }
 
-    public String getNomne() {
-        return nomne;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNomne(String nomne) {
-        this.nomne = nomne;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     @Id
@@ -47,12 +38,9 @@ public class Autor {
     private Long id;
     private Integer anoNascimento;
     private Integer anoFalecimento;
-    @ManyToMany
-    private List<Book> livros;
-
-    public Autor (  ){
 
 
-    }
+
+
 
 }

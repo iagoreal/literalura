@@ -2,6 +2,7 @@ package one.Literalura;
 
 import one.Literalura.model.DataBook;
 import one.Literalura.principal.Main;
+import one.Literalura.repository.RepositoryAuthor;
 import one.Literalura.repository.RepositoryBook;
 import one.Literalura.service.ConsumoApi;
 import one.Literalura.service.ConverteDados;
@@ -13,7 +14,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class LiteraluraApplication implements CommandLineRunner {
 	private RepositoryBook repositoryBook;
-	public static void main(String[] args) {
+	private RepositoryAuthor repositoryAuthor;
+
+
+    public LiteraluraApplication(RepositoryBook repositoryBook, RepositoryAuthor repositoryAuthor) {
+        this.repositoryBook = repositoryBook;
+		this.repositoryAuthor = repositoryAuthor;
+    }
+
+    public static void main(String[] args) {
 
 		SpringApplication.run(LiteraluraApplication.class, args);
 
@@ -23,7 +32,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		Main principal = new Main(repositoryBook);
+		Main principal = new Main(repositoryBook, repositoryAuthor);
 		principal.showMenu();
 	}
 }

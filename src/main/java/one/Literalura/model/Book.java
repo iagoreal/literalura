@@ -10,10 +10,11 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    @ManyToMany
     private String authors;
     private String languages;
     private Integer downloadCount;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Autor autor;
 
 
     public Integer getDownload_count() {
@@ -56,9 +57,18 @@ public class Book {
     public Book (DataResponseApi responseApi){
             this.title = responseApi.results().getFirst().titulo();
             this.authors = responseApi.results().getFirst().autores().stream().map(
-                    a -> a.nomne() + " (" + a.anoNascimento() + "-" + a.anoFalecimento() + ")").collect(Collectors.joining(", "));
+                    a -> a.nome() + " (" + a.anoNascimento() + "-" + a.anoFalecimento() + ")").collect(Collectors.joining(", "));
             this.languages = String.join(", ", responseApi.results().getFirst().idiomas());
             this.downloadCount = responseApi.results().getFirst().downloads();
+
+            if(responseApi.results().getFirst().autores() != null && !responseApi.results().getFirst().autores().isEmpty()){
+                var autorData = responseApi.results().getFirst().autores();
+                Autor autor = new Autor();
+                autor.setNome(autorData.getFirst().nome());
+                autor.setAnoNascimento(autorData.getFirst().anoNascimento());
+                autor.setAnoFalecimento(autorData.getFirst().anoFalecimento());
+                this.autor = autor;
+            }
     }
 
     @Override

@@ -1,14 +1,17 @@
 package one.Literalura.principal;
 
+import one.Literalura.model.Autor;
 import one.Literalura.model.Book;
-import one.Literalura.model.DataBook;
 import one.Literalura.model.DataResponseApi;
+import one.Literalura.repository.RepositoryAuthor;
 import one.Literalura.repository.RepositoryBook;
 import one.Literalura.service.ConsumoApi;
 import one.Literalura.service.ConverteDados;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -19,10 +22,17 @@ public class Main {
     private final Scanner scanner = new Scanner(System.in);
     int chose;
     boolean condition = true;
-    private RepositoryBook repository;
+    private RepositoryBook repositoryBook;
+    private RepositoryAuthor repositoryAuthor;
+    private List<Book> books = new ArrayList<>();
+    private List<Autor> authors = new ArrayList<>();
 
-    public Main(RepositoryBook repositoryBook) {
-        this.repository = repositoryBook;
+
+
+    public Main(RepositoryBook repositoryBook, RepositoryAuthor repositoryAuthor) {
+        System.out.println(repositoryBook);
+        this.repositoryBook = repositoryBook;
+        this.repositoryAuthor = repositoryAuthor;
     }
 
     public void showMenu() {
@@ -55,8 +65,10 @@ public class Main {
                     case 1: searchBook();
                         break;
                     case 2:
-
+                        listRegistredBook();
                         break;
+                    case 3:
+                        listRegistredAuthors();
                     case 0:
                         System.out.println("Fechando programa...");
                         condition = false;
@@ -66,6 +78,18 @@ public class Main {
                 System.out.println(e.getMessage());
             }
         }
+    }
+
+    private void listRegistredAuthors() {
+        authors = repositoryAuthor.findAll();
+        System.out.println(authors);
+
+
+    }
+
+    private void listRegistredBook() {
+        books = repositoryBook.findAll();
+        System.out.println(books);
     }
 
 
@@ -85,7 +109,6 @@ public class Main {
                             "1 - Sim (Será salvo na sua lista e você retornará ao menu principal) \n" +
                             "2 - Não (Cancela operação e volta ao menu princial)");
 
-
                     int option;
                     if(scanner.hasNextInt()) {
                          option = scanner.nextInt();
@@ -98,7 +121,7 @@ public class Main {
 
                     switch (option){
                         case 1:
-                            saveBookSearch();
+                            saveBookSearch(book);
                             System.out.println("livro armazenado, voltando ao menu princial");
                             break;
                         case 2:
@@ -122,10 +145,8 @@ public class Main {
         }
     }
 
-    private void saveBookSearch() {
-        DataResponseApi dados = getBookByTilteOrAuthor();
-        Book book = new Book(dados);
-        repository.save(book);
+    private void saveBookSearch(Book book) {
+        repositoryBook.save(book);
 
 
     }
