@@ -14,6 +14,7 @@ public class Book {
     private String languages;
     private Integer downloadCount;
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "autor_id")
     private Autor autor;
 
 

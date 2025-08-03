@@ -69,6 +69,13 @@ public class Main {
                         break;
                     case 3:
                         listRegistredAuthors();
+                        break;
+                    case 4:
+                        listAutoresVivosNoAno();
+                        break;
+                    case 5:
+                        listBooksByLanguage();
+                        break;
                     case 0:
                         System.out.println("Fechando programa...");
                         condition = false;
@@ -80,16 +87,49 @@ public class Main {
         }
     }
 
+    private void listBooksByLanguage() {
+        System.out.println("Digite o código do idioma (ex: en, pt, fr):");
+        String languages = scanner.nextLine();
+
+        List<Book> livros = repositoryBook.findByLanguages(languages);
+
+        if (livros.isEmpty()) {
+            System.out.println("Nenhum livro encontrado com o idioma: " + languages);
+        } else {
+            System.out.println("Livros com idioma '" + languages + "':");
+            livros.forEach(System.out::println);
+        }
+    }
+
     private void listRegistredAuthors() {
         authors = repositoryAuthor.findAll();
         System.out.println(authors);
-
-
+        showMenu();
     }
 
     private void listRegistredBook() {
         books = repositoryBook.findAll();
         System.out.println(books);
+
+    }
+
+    private void listAutoresVivosNoAno() {
+        System.out.println("Digite o ano desejado:");
+        int ano = scanner.nextInt();
+        scanner.nextLine();
+
+        List<Autor> autoresVivos = repositoryAuthor.findAutoresVivosNoAno(ano);
+
+        if (autoresVivos.isEmpty()) {
+            System.out.println("Nenhum autor encontrado vivo no ano " + ano);
+        } else {
+            System.out.println("Autores vivos no ano " + ano + ":");
+            autoresVivos.forEach(a -> {
+                System.out.println("Nome: " + a.getNome() +
+                        ", Nascimento: " + a.getAnoNascimento() +
+                        ", Falecimento: " + a.getAnoFalecimento());
+            });
+        }
     }
 
 
